@@ -24,10 +24,11 @@ with open(file_path, 'r', encoding='utf-8') as file:
                     final_data.append({
                         'Agente': current_agent,
                         'Planta': planta,
-                        **{f'Hora_{i+1}': None for i in range(24)}
+                        **{f'Hora_{i+1}': hour for i, hour in enumerate(current_hours)}
                     })
             current_agent = line.split(":")[1].strip()
             current_plantas = []
+            current_hours = []
             inside_data_block = True
             continue
 
@@ -40,16 +41,9 @@ with open(file_path, 'r', encoding='utf-8') as file:
                 # Extraer información relevante
                 plant = columns[0].strip()
                 hours = [float(value.replace(',', '.').strip()) for value in columns[2:]]
-                # Crear un diccionario con la información
-                data = {
-                    'Agente': current_agent,
-                    'Planta': plant,
-                    **{f'Hora_{i+1}': hour for i, hour in enumerate(hours)}
-                }
-                # Agregar el diccionario a la lista de datos
-                final_data.append(data)
-                # Agregar la planta a la lista de plantas del agente
+                # Agregar la planta y las horas a las listas correspondientes
                 current_plantas.append(plant)
+                current_hours = hours
 
 # Crear un DataFrame de pandas
 df = pd.DataFrame(final_data)
