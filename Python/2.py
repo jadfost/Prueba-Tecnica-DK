@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 # Cargar el dataset Master Data
-ruta_master_data = r'C:\Users\Daniela Benavides\Documents\Documentos Jared Foster\Prueba Tecnica DK\Prueba_Tecnica\Datos3\Datos Maestros VF.xlsx'
+ruta_master_data = r'C:\Users\JadFost\OneDrive\Escritorio\Prueba-Tecnica-DK\Prueba_Tecnica\Datos3\Datos Maestros VF.xlsx'
 hoja_master_data = 'Master Data Oficial'
 master_data = pd.read_excel(ruta_master_data, sheet_name=hoja_master_data)
 
@@ -12,7 +12,7 @@ filtro_tipo_central = master_data['Tipo de central (Hidro, Termo, Filo, Menor)']
 master_data_filtrado = master_data[filtro_agentes & filtro_tipo_central]
 
 # Cargar el archivo dDEC1204.TXT con la codificación 'latin1'
-ruta_ddec = r'C:\Users\Daniela Benavides\Documents\Documentos Jared Foster\Prueba Tecnica DK\Prueba_Tecnica\Datos3\dDEC1204.txt'
+ruta_ddec = r'C:\Users\JadFost\OneDrive\Escritorio\Prueba-Tecnica-DK\Prueba_Tecnica\Datos3\dDEC1204.txt'
 ddec_data = pd.read_csv(ruta_ddec, header=None, names=['Central'] + list(range(24)), encoding='latin1')
 
 # Realizar el merge especificando las columnas de fusión
