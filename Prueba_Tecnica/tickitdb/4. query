@@ -1,0 +1,91 @@
+--- Se crea la tabla de allevents
+CREATE TABLE allevents (
+    eventid INT,
+    venueid INT,
+    categoryid INT,
+    dateid INT,
+    eventname VARCHAR(255),
+    eventdate TIMESTAMP
+);
+
+--- Se crea la tabla de allusers
+CREATE TABLE allusers (
+    userid INT,
+    username VARCHAR(50),
+    firstname VARCHAR(50),
+    lastname VARCHAR(50),
+    city VARCHAR(50),
+    state VARCHAR(50),
+    email VARCHAR(255),
+    phone VARCHAR(20),
+    jazz_preference BOOLEAN,
+    opera_preference BOOLEAN,
+    rock_preference BOOLEAN,
+    column12 BOOLEAN,
+    column13 BOOLEAN,
+    column14 BOOLEAN,
+    column15 BOOLEAN,
+    column16 BOOLEAN,
+    column17 BOOLEAN,
+    column18 BOOLEAN,
+    column19 BOOLEAN,
+    column20 BOOLEAN
+);
+
+--- Se crea la tabla de category
+CREATE TABLE category (
+    categoryid INT,
+    categorygroup VARCHAR(255),
+    categoryname VARCHAR(255),
+    categorydesc VARCHAR(255)
+);
+
+--- Se crea la tabla de date2008
+CREATE TABLE date2008 (
+    dateid INT,
+    datevalue DATE,
+    dayname VARCHAR(255),
+    dayofweek INT,
+    monthabbr VARCHAR(255),
+    monthnum INT,
+    year INT,
+    isweekend BOOLEAN
+);
+
+--- Se crea la tabla de listings
+CREATE TABLE listings (
+    listingid INT,
+    eventid INT,
+    sellerid INT,
+    listingdateid INT,
+    numtickets INT,
+    priceperticket NUMERIC(10,2),
+    totalprice NUMERIC(10,2),
+    createddate TIMESTAMP
+);
+
+--- Se crea la tabla de sales_tab
+CREATE TABLE sales_tab (
+    saleid INT,
+    eventid INT,
+    userid INT,
+    listingid INT,
+    dateid INT,
+    quantity INT,
+    priceperticket NUMERIC(10,2),
+    totalprice NUMERIC(10,2),
+    saledate TIMESTAMP
+);
+
+--- Se crea la tabla de venue
+CREATE TABLE venue (
+    venueid INT,
+    venuename VARCHAR(255),
+    venuecity VARCHAR(255),
+    venuestate VARCHAR(255),
+    venueactive INT
+);
+
+
+SELECT * FROM public.date2008 LIMIT 10;
+SELECT * FROM public.listings LIMIT 10;
