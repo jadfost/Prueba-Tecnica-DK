@@ -18,18 +18,16 @@ CREATE TABLE allusers (
     state VARCHAR(50),
     email VARCHAR(255),
     phone VARCHAR(20),
-    jazz_preference BOOLEAN,
-    opera_preference BOOLEAN,
-    rock_preference BOOLEAN,
-    column12 BOOLEAN,
-    column13 BOOLEAN,
-    column14 BOOLEAN,
-    column15 BOOLEAN,
-    column16 BOOLEAN,
-    column17 BOOLEAN,
-    column18 BOOLEAN,
-    column19 BOOLEAN,
-    column20 BOOLEAN
+    jazz BOOLEAN,
+    opera BOOLEAN,
+    rock BOOLEAN,
+    bachata BOOLEAN,
+    salsa BOOLEAN,
+    cumbia BOOLEAN,
+    regge BOOLEAN,
+    trap BOOLEAN,
+    ballenato BOOLEAN,
+    lobi BOOLEAN
 );
 
 --- Se crea la tabla de category
@@ -66,6 +64,7 @@ CREATE TABLE listings (
 
 --- Se crea la tabla de sales_tab
 CREATE TABLE sales_tab (
+    number INT,
     saleid INT,
     eventid INT,
     userid INT,
@@ -86,6 +85,53 @@ CREATE TABLE venue (
     venueactive INT
 );
 
+--------------------- Resultado de Consultas SQL -----------------------
+-- a. ¿Cuántos Usuarios gustan del Jazz?
+SELECT COUNT(*) AS usuarios_gustan_jazz
+FROM allusers
+WHERE jazz = TRUE;
 
-SELECT * FROM public.date2008 LIMIT 10;
-SELECT * FROM public.listings LIMIT 10;
+-- b. ¿Cuántos Usuarios gustan de la ópera y del rock al mismo tiempo?
+SELECT COUNT(*) AS usuarios_opera_y_rock
+FROM allusers
+WHERE opera = TRUE AND rock = TRUE;
+
+-- c. ¿Cuál es el promedio, moda y mediana del total de Ventas?
+SELECT
+  AVG(totalprice) AS promedio_ventas,
+  MAX(totalprice) AS moda_ventas,
+  PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY totalprice) AS mediana_ventas
+FROM sales_tab;
+
+-- d. ¿Cuál es el promedio de ventas de usuarios que gustan del rock, pero NO del Jazz?
+SELECT AVG(s.totalprice) AS promedio_ventas_rock_sin_jazz
+FROM sales_tab s
+JOIN allusers u ON s.userid = u.userid
+WHERE u.rock = TRUE AND u.jazz = FALSE;
+
+----------------------------------------------------------------------
+
+------------- Nueva tabla de informacion adjunta ----------------
+CREATE TABLE merged_data AS
+SELECT
+  u.username,
+  u.lastname,
+  u.email,
+  e.eventname,
+  v.venuename,
+  to_char(e.eventdate, 'YYYY-MM-DD') AS eventdate,
+  s.quantity,
+  s.totalprice
+FROM
+  allusers u
+JOIN sales_tab s ON u.userid = s.userid
+JOIN allevents e ON s.eventid = e.eventid
+JOIN venue v ON e.venueid = v.venueid;
+
+----- Exportar tabla a un archivo CSV ---------
+UNLOAD ('SELECT * FROM merged_data')
+TO 's3://modelaciondk/tickitdb/merge_data.csv'
+CREDENTIALS 'aws_access_key_id=AKIAVISDIRYZU7LYYR45;aws_secret_access_key=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'
+DELIMITER ','
+ALLOWOVERWRITE
+PARALLEL OFF;
